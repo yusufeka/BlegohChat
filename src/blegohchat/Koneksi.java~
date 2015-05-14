@@ -1,0 +1,102 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ * Author Blegoh
+ */
+
+package blegohchat;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class Koneksi {
+    private Connection conn;
+    private Statement statement;
+    public ResultSet result;
+    private String query;
+    private String select;
+    private String from;
+    private String where;
+    private String having;
+    private String join;
+    
+    public Koneksi(){
+        try{
+            String url = "jdbc:mysql://localhost:3306/blegohChat";
+            String user = "root";
+            String password = "hornline";
+            conn = DriverManager.getConnection(url,user,password);
+            statement = conn.createStatement();
+            System.out.println("Koneksi Sukses");
+            this.select = "*";
+            this.join = "";
+        } catch(SQLException sqle){
+            System.out.println("Proses koneksi gagal "+sqle);
+        }
+    }
+    
+    public void updateQuery(){
+        this.query = "select "+select+" from "+from;
+        if (!join.equalsIgnoreCase("")) {
+            this.query += join;
+        }
+        if (where != null) {
+            this.query += " where "+where;
+        }else if (having != null) {
+            this.query += " having "+where;
+        }
+    }
+    
+    public void select(String select){
+        this.select = select;
+        this.updateQuery();
+    }
+    public void from(String from){
+        this.from = from;
+        this.updateQuery();
+    }
+    public void where(String where){
+        this.where = where;
+        this.updateQuery();
+    }
+    public void having(String having){
+        this.having = having;
+        this.updateQuery();
+    }
+    public void join(String type, String join){
+        this.join  += " "+type+" join "+join;
+        this.updateQuery();
+    }
+    
+    public void setQuery(String query){
+        this.query = query;
+    }
+    
+    public void executeQuery(){
+        try{
+            System.out.println(query);
+            result = statement.executeQuery(this.query);
+        }catch(SQLException e){
+            System.out.println(e);
+        }
+    }
+    
+    public void executeUpdate() throws SQLException{
+        statement.executeUpdate(this.query);
+    }
+    
+    public ResultSet getResult(){
+        return result;
+    }
+    
+    public int getRow() throws SQLException{
+        result.last();
+        int rows = result.getRow();
+        result.beforeFirst();
+        return rows;
+    }
+}
