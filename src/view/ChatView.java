@@ -5,6 +5,7 @@
  */
 package view;
 
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -15,8 +16,6 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.text.DefaultCaret;
 
 /**
  *
@@ -91,8 +90,10 @@ public class ChatView extends javax.swing.JFrame {
         this.conversation = conversation;
         int x = 20;
         for (int i = 0; i < conversation.length; i++) {
-            int pjg = conversation[i].getText().length();
-            int a = (z[i])?300-(pjg*6):20;
+            int pjg = conversation[i].getText().replaceAll("<html>", "").replaceAll("</html>", "").replaceAll("<p>", "").replaceAll("</p>", "").length();
+            //double d = conversation[i].getPreferredSize().getWidth();
+            int a = (z[i])?340-(pjg*8):20;
+            this.conversation[i].setFont(new Font("Consolas", Font.PLAIN, 14));
             this.panel.add(this.conversation[i], new org.netbeans.lib.awtextra.AbsoluteConstraints(a, x, -1, -1));
             x +=40;
         }
