@@ -26,14 +26,14 @@ public class ChatView extends javax.swing.JFrame {
     /**
      * Creates new form Chat
      */
-    URL url;
+    private URL url;
     private Image image;
     private Toolkit format;
 
     public ChatView() {
         initComponents();
         chat.requestFocus();
-        
+
     }
 
     @SuppressWarnings("unchecked")
@@ -78,45 +78,70 @@ public class ChatView extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    public void injek(){
+    public void injek() {
         //jScrollPane2.getHorizontalScrollBar().setValue(0);
         panel.revalidate();
-        int height = (int)panel.getPreferredSize().getHeight();
-        Rectangle rect = new Rectangle(0,height,10,10);
+        int height = (int) panel.getPreferredSize().getHeight();
+        Rectangle rect = new Rectangle(0, height, 10, 10);
+        panel.scrollRectToVisible(rect);
+    }
+    public void sundul() {
+        //jScrollPane2.getHorizontalScrollBar().setValue(0);
+        panel.revalidate();
+        Rectangle rect = new Rectangle(0, 0, 10, 10);
         panel.scrollRectToVisible(rect);
     }
     
-    public void addConversation(JLabel conversation[], boolean z[]){
+
+    public void addConversation(JLabel conversation[], boolean z[]) {
         this.conversation = conversation;
         int x = 20;
         for (int i = 0; i < conversation.length; i++) {
-            int pjg = conversation[i].getText().replaceAll("<html>", "").replaceAll("</html>", "").replaceAll("<p>", "").replaceAll("</p>", "").length();
+            int pjg = getLongestString(conversation[i].getText(), "`").length();
             //double d = conversation[i].getPreferredSize().getWidth();
-            int a = (z[i])?340-(pjg*8):20;
+            int a = (z[i]) ? 340 - (pjg * 8) : 20;
+            System.out.println(pjg);
             this.conversation[i].setFont(new Font("Consolas", Font.PLAIN, 14));
             this.panel.add(this.conversation[i], new org.netbeans.lib.awtextra.AbsoluteConstraints(a, x, -1, -1));
-            x +=40;
+            x += 40;
         }
+        System.out.println("============");
     }
     
-    public void detailListener(MouseAdapter listener){
+    private String getLongestString(String string,String pisah){
+        string = clean(string);
+        String[] a = string.split(pisah);
+        string = "";
+        for (String a1 : a) {
+            string = (string.length() < a1.trim().length()) ? a1.trim() : string;
+        }
+        return string;
+    }
+    
+    private String clean(String s){
+        s = s.replace("<html>", "").replace("</html>", "");
+        s = s.replace("<p>", "").replace("</p>", "`");
+        s = s.replace("<br />", "`");
+        return s;
+    }
+
+    public void detailListener(MouseAdapter listener) {
         nama.addMouseListener(listener);
     }
-    
-    public void removeConversation(){
-        try{
-        this.panel.removeAll();
-        jScrollPane2.setFocusable(true);
-        }catch(Exception e){
+
+    public void removeConversation() {
+        try {
+            this.panel.removeAll();
+            jScrollPane2.setFocusable(true);
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
-    
-    
+
     public void addFoto(String ft) {
         try {
             format = Toolkit.getDefaultToolkit();
-            url = new URL("http://localhost/chat/"+ft);
+            url = new URL("http://localhost/chat/" + ft);
             image = ImageIO.read(url).getScaledInstance(50, 50, Image.SCALE_SMOOTH);
             ImageIcon ico = new ImageIcon(image);
             foto.setIcon(ico);
@@ -124,11 +149,11 @@ public class ChatView extends javax.swing.JFrame {
             System.out.println(e);
         }
     }
-    
-    public void addFotoListener(MouseAdapter listener){
+
+    public void addFotoListener(MouseAdapter listener) {
         foto.addMouseListener(listener);
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSend;
     private javax.swing.JTextArea chat;
@@ -140,7 +165,7 @@ public class ChatView extends javax.swing.JFrame {
     private javax.swing.JPanel panel;
     // End of variables declaration//GEN-END:variables
     private JLabel conversation[];
-    
+
     public void setNama(String nama) {
         this.nama.setText(nama);
     }
@@ -148,16 +173,19 @@ public class ChatView extends javax.swing.JFrame {
     public void setLastSeen(String lastSeen) {
         this.lastSeen.setText(lastSeen);
     }
-    
-    public void addSendListener(ActionListener listener){
+
+    public void addSendListener(ActionListener listener) {
         btnSend.addActionListener(listener);
     }
-    
-    public String getChat(){
-        return chat.getText();
+
+    public String getChat() {
+        String chat = "<html>";
+        chat += this.chat.getText();
+        chat += "</html>";
+        return chat;
     }
-    
-    public void clearChat(){
+
+    public void clearChat() {
         chat.setText("");
     }
 

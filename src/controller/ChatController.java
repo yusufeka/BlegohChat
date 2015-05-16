@@ -43,12 +43,13 @@ public class ChatController {
         this.friendUser = theModel.getFriendUser();
         this.theView.addFoto(friendUser.getFoto());
         this.refreshConversation();
+        this.theView.sundul();
         this.theView.injek();
         this.theView.addSendListener(new SendListener());
         this.theView.addFotoListener(new FotoListener());
         this.theView.detailListener(new DetailListener());
     }
-
+    
     public void refreshConversation() {
         Chat[] conv = theModel.getConversation().getChat();
         conversation = new JLabel[conv.length];
@@ -63,8 +64,6 @@ public class ChatController {
             int senderId = conv[i].getSender().getUserId();
             isSender[i] = (userId == senderId) ? true : false;
         }
-        theView.clearChat();
-        this.theView.removeConversation();
         theView.addConversation(conversation, isSender);
     }
 
@@ -74,9 +73,10 @@ public class ChatController {
         public void actionPerformed(ActionEvent ae) {
             try {
                 theModel.chat(theView.getChat());
-                //refreshConversation();
-                theView.removeConversation();
                 theView.clearChat();
+                theView.removeConversation();
+                refreshConversation();
+                theView.sundul();
             } catch (SQLException ex) {
                 System.out.println(ex);
             }
@@ -114,7 +114,7 @@ public class ChatController {
                 theView.dispose();
                 ProfilView theView = new ProfilView();
                 ProfilModel theModel;
-                theModel = new ProfilModel(user,friendUser);
+                theModel = new ProfilModel(user, friendUser);
                 ProfilController theController = new ProfilController(theModel, theView);
                 theView.setVisible(true);
             } catch (IOException ex) {
