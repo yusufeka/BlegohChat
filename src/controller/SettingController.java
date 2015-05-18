@@ -11,7 +11,7 @@ import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import lib.User;
+import model.User;
 import model.LoginModel;
 import model.ProfilModel;
 import model.SettingModel;

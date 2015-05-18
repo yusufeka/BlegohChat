@@ -3,10 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package view;
 
 import java.awt.event.ActionListener;
+import java.io.File;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -14,11 +16,11 @@ import java.awt.event.ActionListener;
  */
 public class RegisterView extends javax.swing.JFrame {
 
-    
     public RegisterView() {
         initComponents();
+        chooser = new JFileChooser();
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -150,39 +152,39 @@ public class RegisterView extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public void addBrowseListener(ActionListener listener){
+    public void addBrowseListener(ActionListener listener) {
         btnBrowse.addActionListener(listener);
     }
-    
-    public void addSubmitListener(ActionListener listener){
+
+    public void addSubmitListener(ActionListener listener) {
         btnSubmit.addActionListener(listener);
     }
-    
-    public void addSignInListener(ActionListener listener){
+
+    public void addSignInListener(ActionListener listener) {
         btnSignIn.addActionListener(listener);
     }
-    
-    public void setPath(String s){
+
+    public void setPath(String s) {
         path.setText(s);
     }
-    
-    public String getPath(){
+
+    public String getPath() {
         return path.getText();
     }
-    
-    public String getNama(){
+
+    public String getNama() {
         return nama.getText();
     }
-    
-    public String getEmail(){
-        return nama.getText();
+
+    public String getEmail() {
+        return email.getText();
     }
-    
-    public String getUsername(){
+
+    public String getUsername() {
         return username.getText();
     }
-    
-    public String getPassword(){
+
+    public String getPassword() {
         String p = "";
         char a[] = pass.getPassword();
         for (int i = 0; i < a.length; i++) {
@@ -190,8 +192,8 @@ public class RegisterView extends javax.swing.JFrame {
         }
         return p;
     }
-    
-    public String getConfirm(){
+
+    public String getConfirm() {
         String p = "";
         char a[] = confirm.getPassword();
         for (int i = 0; i < a.length; i++) {
@@ -200,6 +202,24 @@ public class RegisterView extends javax.swing.JFrame {
         return p;
     }
 
+    public void showChooser() {
+        String s;
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "JPG & GIF Images", "jpg", "gif","png");
+        chooser.setFileFilter(filter);
+        int returnVal = chooser.showOpenDialog(this);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
+            s = chooser.getSelectedFile().getAbsolutePath();
+            setPath(s);
+        } else {
+            
+        }
+    }
+    
+    
+    private JFileChooser chooser;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBrowse;
     private javax.swing.JButton btnSignIn;

@@ -13,7 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.border.AbstractBorder;
 import lib.Chat;
 import lib.TextBubbleBorder;
-import lib.User;
+import model.User;
 import model.ChatModel;
 import model.HomeModel;
 import model.ProfilModel;

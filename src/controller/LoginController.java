@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package controller;
 
 import java.awt.event.ActionEvent;
@@ -13,7 +12,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import lib.User;
+import model.User;
 import model.HomeModel;
 import model.LoginModel;
 import model.RegisterModel;
@@ -24,6 +23,7 @@ import view.*;
  * @author blegoh
  */
 public class LoginController {
+
     private LoginModel theModel;
     private LoginView theView;
 
@@ -38,23 +38,22 @@ public class LoginController {
 
         @Override
         public void actionPerformed(ActionEvent ae) {
-            //try{
-                theView.dispose();
-                RegisterView theView = new RegisterView();
-                RegisterModel theModel = new RegisterModel();
-                RegisterController theController = new RegisterController(theModel, theView);
-                theView.setVisible(true);
-            
+            theView.dispose();
+            RegisterView theView = new RegisterView();
+            RegisterModel theModel = new RegisterModel();
+            RegisterController theController = new RegisterController(theModel, theView);
+            theView.setVisible(true);
+
         }
     }
-    
-    class LoginListener implements ActionListener { 
+
+    class LoginListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent ae) {
             //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             String username, password;
-            try{
+            try {
                 username = theView.getUsername();
                 password = theView.getPassword();
                 User user = new User(username);
@@ -68,12 +67,12 @@ public class LoginController {
                     theView.setVisible(true);
                     HomeModel theModel = new HomeModel(user);
                     HomeController theController = new HomeController(theModel, theView);
-                }else{
+                } else {
                     System.out.println(isValid);
                     JOptionPane.showMessageDialog(theView, "login gagal");
                 }
-            }catch(NumberFormatException e){
-                
+            } catch (NumberFormatException e) {
+
             } catch (SQLException ex) {
                 Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
@@ -81,5 +80,5 @@ public class LoginController {
             }
         }
     }
-    
+
 }

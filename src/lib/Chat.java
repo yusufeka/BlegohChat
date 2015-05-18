@@ -1,5 +1,7 @@
 package lib;
 
+import model.User;
+
 /**
  *
  * @author blegoh

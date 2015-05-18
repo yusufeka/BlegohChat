@@ -103,9 +103,15 @@ public class ChatView extends javax.swing.JFrame {
             System.out.println(pjg);
             this.conversation[i].setFont(new Font("Consolas", Font.PLAIN, 14));
             this.panel.add(this.conversation[i], new org.netbeans.lib.awtextra.AbsoluteConstraints(a, x, -1, -1));
-            x += 40;
+            x += getRowCount(conversation[i].getText(), "`")*15 + 25;
         }
         System.out.println("============");
+    }
+    
+    private int getRowCount(String s, String pisah){
+        s = clean(s);
+        String[] a = s.split(pisah);
+        return a.length;
     }
     
     private String getLongestString(String string,String pisah){

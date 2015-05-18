@@ -8,7 +8,11 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import model.LoginModel;
 import model.RegisterModel;
 import view.LoginView;
@@ -37,87 +41,41 @@ public class RegisterController {
 
         @Override
         public void actionPerformed(ActionEvent ae) {
-            try {
-                String s;
-                JFileChooser jfc = new JFileChooser();
-                jfc.showDialog(jfc, "Choose an image file");
-                s = jfc.getSelectedFile().getAbsolutePath();
-                theView.setPath(s);
-
-            } catch (Exception ex) {
-                System.out.println(ex);
-            }
+            theView.showChooser();
         }
     }
 
     class SubmitListener implements ActionListener {
-        String nama = theView.getNama();
-        String email = theView.getEmail();
-        String username = theView.getUsername();
-        String password = theView.getPassword();
-        String confirm = theView.getConfirm();
-        String foto = theView.getPath();
-            
 
         @Override
         public void actionPerformed(ActionEvent ae) {
-            theModel.setNama(nama);
-            theModel.setEmail(email);
-            theModel.setUsername(username);
-            theModel.setPassword(password);
-            theModel.setFoto(foto);
-            boolean isValid = this.isValid();
-            //if (isValid) {
-                theModel.saveUser();
-                theModel.uploadFoto();
-                theView.dispose();
-                LoginView theView = new LoginView();
-                LoginModel theModel = new LoginModel();
-                LoginController theController = new LoginController(theModel, theView);
-                theView.setVisible(true);
-            //}else{
-            //    System.out.println("taek");
-            //}
+            try {
+                theModel.setUserID();
+                theModel.setEmail(theView.getEmail());
+                theModel.setNama(theView.getNama());
+                theModel.setUsername(theView.getUsername());
+                theModel.setPassword(theView.getPassword(), theView.getConfirm());
+                theModel.setFoto(theView.getPath());
+                if (theModel.isValid()) {
+                    theModel.saveUser();
+                    theModel.uploadFoto(theView.getPath());
+                    theView.dispose();
+                    LoginView theView = new LoginView();
+                    LoginModel theModel = new LoginModel();
+                    LoginController theController = new LoginController(theModel, theView);
+                    theView.setVisible(true);
+                }else{
+                    JOptionPane.showMessageDialog(theView, theModel.getPesan());
+                }
 
+            } catch (SQLException ex) {
+                
+            }
         }
-        
-        public boolean isValid(){
-            boolean isValid = true;
-            if (nama.trim().length() == 0) {
-                isValid = false;
-            }
-            if (email.trim().length() == 0) {
-                isValid = false;
-            } else {
-                try {
-                    if (theModel.isEmailExist()) {
-                        isValid = false;
-                    }
-                } catch (SQLException ex) {
-                    System.out.println(ex);
-                }
-            }
-            if (username.trim().length() == 0) {
-                isValid = false;
-            } else {
-                try {
-                    if (theModel.isUsernameExist()) {
-                        isValid = false;
-                    }
-                } catch (SQLException ex) {
-                    System.out.println(ex);
-                }
-            }
-            if (password.trim().length() == 0) {
-                isValid = false;
-            } else if (!password.equals(confirm)) {
-                isValid = false;
-            }
-            return isValid;
-        }
+
     }
 
-    class SignInListener implements ActionListener{
+    class SignInListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent ae) {
@@ -127,6 +85,6 @@ public class RegisterController {
             LoginController theController = new LoginController(theModel, theView);
             theView.setVisible(true);
         }
-        
+
     }
 }

@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import lib.Koneksi;
-import lib.User;
 
 /**
  *

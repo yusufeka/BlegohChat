@@ -1,12 +1,11 @@
 package model;
 
+import lib.Conversation;
 import java.sql.SQLException;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import lib.Chat;
-import lib.Conversation;
 import lib.Koneksi;
-import lib.User;
 
 /**
  *

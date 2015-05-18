@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-import lib.User;
+import model.User;
 import model.ProfilModel;
 import view.EditProfilView;
 import view.ProfilView;

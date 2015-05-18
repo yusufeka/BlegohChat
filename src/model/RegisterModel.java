@@ -1,18 +1,19 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Author Blegoh aka Yusuf Eka
+ * Copyright 2015
  */
 package model;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.net.URL;
-import java.net.URLConnection;
+import java.io.InputStream;
 import java.sql.SQLException;
 import lib.Koneksi;
-import lib.User;
+
+import org.apache.commons.net.ftp.FTP;
+import org.apache.commons.net.ftp.FTPClient;
+
 
 /**
  *
@@ -23,18 +24,22 @@ public class RegisterModel {
     private User user;
     private Koneksi kon;
     private static final int BUFFER_SIZE = 4096;
+    private boolean isValid;
 
     public RegisterModel() {
         kon = new Koneksi();
         user = new User();
-        user.setFoto("");
+    }
+    
+    public void setUserID() throws SQLException{
+        user.setUserID();
     }
 
-    public void setUsername(String username) {
+    public void setUsername(String username) throws SQLException {
         this.user.setUsername(username);
     }
 
-    public void setEmail(String email) {
+    public void setEmail(String email) throws SQLException {
         this.user.setEmail(email);
     }
 
@@ -46,65 +51,63 @@ public class RegisterModel {
         this.user.setFoto(foto);
     }
 
-    public void setPassword(String password) {
-        this.user.setPassword(password);
+    public void setPassword(String password, String confirm) {
+        this.user.setPassword(password, confirm);
     }
 
-    public boolean isUsernameExist() throws SQLException {
-        return user.isUsernameExist();
-    }
+    public void uploadFoto(String path) {
+        String server = "localhost";
+        int port = 21;
+        String user = "user1";
+        String pass = "itsme";
 
-    public boolean isEmailExist() throws SQLException {
-        return user.isEmailExist();
-    }
-
-    public void uploadFoto() {
-        String ftpUrl = "ftp://%s:%s@%s/%s;type=i";
-        String host = "laos.cs.unej.ac.id";
-        String user = "st_laos";
-        String pass = "L405pssi";
-        String filePath = this.user.getFoto();
-        String uploadPath = "/blegoh-project/a.jpg";
-
-        ftpUrl = String.format(ftpUrl, user, pass, host, uploadPath);
-
+        FTPClient ftpClient = new FTPClient();
         try {
-            URL url = new URL(ftpUrl);
-            URLConnection conn = url.openConnection();
-            OutputStream outputStream = conn.getOutputStream();
-            FileInputStream inputStream = new FileInputStream(filePath);
 
-            byte[] buffer = new byte[BUFFER_SIZE];
-            int bytesRead = -1;
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, bytesRead);
-            }
+            ftpClient.connect(server, port);
+            ftpClient.login(user, pass);
+            ftpClient.enterLocalPassiveMode();
 
+            ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+
+            // APPROACH #1: uploads first file using an InputStream
+            File firstLocalFile = new File(path);
+
+            String firstRemoteFile = this.user.getFoto();
+            InputStream inputStream = new FileInputStream(firstLocalFile);
+
+            System.out.println("Start uploading first file");
+            boolean done = ftpClient.storeFile(firstRemoteFile, inputStream);
             inputStream.close();
-            outputStream.close();
+            if (done) {
+                System.out.println("The first file is uploaded successfully.");
+            }
+            inputStream.close();
 
-            System.out.println("File uploaded");
         } catch (IOException ex) {
+            System.out.println("Error: " + ex.getMessage());
             ex.printStackTrace();
-        }
-    }
-
-    public void saveUser() {
-        String sql = "insert into user values (null,'" + user.getUsername() + "', "
-                + "'" + user.getPassword()+ "','" + user.getNama()+ "','" + user.getUsername() + "." + this.getEkstensi() + "',"
-                + "now(),'"+user.getEmail()+"')";
-    }
-
-    private String getEkstensi() {
-        String a = "";
-        int mulai = 0;
-        for (int i = this.user.getFoto().length() - 1; i >= 0; i--) {
-            if (this.user.getFoto().charAt(i) == '.') {
-                mulai = i + 1;
-                break;
+        } finally {
+            try {
+                if (ftpClient.isConnected()) {
+                    ftpClient.logout();
+                    ftpClient.disconnect();
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
             }
         }
-        a = this.user.getFoto().substring(mulai);
-        return a;
+    }
+
+    public void saveUser() throws SQLException {
+        user.saveUser();
+    }
+
+    public boolean isValid() {
+        return user.isValid();
+    }
+
+    public String getPesan() {
+        return user.getPesan();
     }
 }
