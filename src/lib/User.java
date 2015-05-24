@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model;
+package lib;
 
 import java.sql.SQLException;
-import lib.Koneksi;
 
 /**
  *
@@ -24,11 +23,12 @@ public class User {
     private String foto;
     private String status;
     private int isActive;
+    private String code;
     private boolean valid = true;
     private String pesan = "";
 
-    public User() {
-        kon = new Koneksi();
+    public User() throws SQLException {
+        setUserID();
     }
 
     public User(String username) throws SQLException {
@@ -59,30 +59,14 @@ public class User {
         this.foto = kon.getResult().getString("foto");
         this.status = kon.getResult().getString("status");
         this.isActive = kon.getResult().getInt("is_active");
-    }
-
-    public String addSlash(String s) {
-        String a = "";
-        for (int i = 0; i < s.length(); i++) {
-            a += ("'".equals(s.charAt(i) + "")) ? "\\'" : s.charAt(i);
-        }
-        return a;
-    }
-
-    public boolean isUserExist() throws SQLException {
-        kon = new Koneksi();
-        kon.from("user");
-        kon.where("username = '" + addSlash(username) + "' and password = '" + addSlash(password) + "'");
-        kon.executeQuery();
-        int i = kon.getRow();
+        this.code = kon.getResult().getString("confirmation_code");
         kon.close();
-        return (i == 1) ? true : false;
     }
 
     public boolean isUsernameExist(String username) throws SQLException {
         kon = new Koneksi();
         kon.from("user");
-        kon.where("username = '" + addSlash(username) + "'");
+        kon.where("username = '" + username + "'");
         kon.executeQuery();
         int i = kon.getRow();
         kon.close();
@@ -115,7 +99,7 @@ public class User {
     }
 
     public String getFoto() {
-        return this.foto;
+        return (!this.foto.equals(""))?this.foto:"default.jpg";
     }
 
     public String getStatus() {
@@ -129,22 +113,33 @@ public class User {
     public String getEmail() {
         return this.email;
     }
-
-    public boolean isValid() {
-        return this.valid;
+    
+    public boolean isAktif(){
+        return (this.isActive == 1)?true:false;
     }
     
-    public String getPesan(){
+    public String getCode(){
+        return this.code;
+    }
+    
+    public boolean isValid() {
+        boolean a = this.valid;
+        this.valid = true;
+        return a;
+    }
+
+    public String getPesan() {
         String a = this.pesan;
         pesan = "";
         return a;
     }
-    
+
     //mengeset User ID dengan Next Auto Increment
-    public void setUserID() throws SQLException{
+    private void setUserID() throws SQLException {
         kon = new Koneksi();
         kon.setQuery("SHOW TABLE STATUS WHERE Name LIKE 'user'");
         kon.executeQuery();
+        kon.getResult().next();
         this.userId = kon.getResult().getInt("Auto_increment");
         kon.close();
     }
@@ -153,22 +148,22 @@ public class User {
         if (password.trim().length() == 0) {
             this.valid = false;
             this.pesan += "password kosong\n";
-        }else if(confirm.trim().length() == 0){
+        } else if (confirm.trim().length() == 0) {
             this.valid = false;
             this.pesan += "confirm password kosong\n";
-        }else if (!password.equals(confirm)) {
+        } else if (!password.equals(confirm)) {
             this.valid = false;
             this.pesan += "confirm password tidak sesuai\n";
         } else {
             this.password = password;
         }
     }
-    
-    public void setPassword(String password){
+
+    public void setPassword(String password) {
         if (password.trim().length() == 0) {
             this.valid = false;
             this.pesan += "password kosong\n";
-        }else {
+        } else {
             this.password = password;
         }
     }
@@ -185,7 +180,7 @@ public class User {
         }
     }
 
-    public void SetNama(String nama) {
+    public void setNama(String nama) {
         if (nama.trim().length() == 0) {
             this.valid = false;
             this.pesan += "nama kosong\n";
@@ -193,16 +188,18 @@ public class User {
             this.nama = nama;
         }
     }
-    
+
     public void setFoto(String foto) {
         if (foto.trim().length() == 0) {
             this.foto = "";
-        }else{
-            this.foto = getUserId()+getEkstensi(foto);
+        } else {
+            this.foto = getUserId() + getEkstensi(foto);
         }
     }
     
-    
+    public void setAktif(){
+        this.isActive = 1;
+    }
 
     //blm fix
     public void setStatus(String status) {
@@ -224,19 +221,20 @@ public class User {
             this.email = email;
         }
     }
-    
+
     private String getEkstensi(String fileName) {
-            String a = "";
-            int mulai = 0;
-            for (int i = fileName.length() - 1; i >= 0; i--) {
-                if (fileName.charAt(i) == '.') {
-                    mulai = i + 1;
-                    break;
-                }
+        String a = "";
+        int mulai = 0;
+        for (int i = fileName.length() - 1; i >= 0; i--) {
+            if (fileName.charAt(i) == '.') {
+                mulai = i;
+                break;
             }
-            a = fileName.substring(mulai);
-            return a;
         }
+        a = fileName.substring(mulai);
+        return a;
+    }
+
     public void updateUser() throws SQLException {
         if (valid) {
             kon = new Koneksi();
@@ -244,21 +242,6 @@ public class User {
                     + getPassword() + "', nama = '" + getNama() + "',status = '"
                     + getStatus() + "',email='" + getEmail() + "',is_active = " + isActive + " "
                     + "where user_id = " + getUserId();
-            kon.setQuery(sql);
-            kon.executeUpdate();
-            kon.close();
-        }
-    }
-
-    public void saveUser() throws SQLException {
-        if (valid) {
-            kon = new Koneksi();
-            String sql = "insert into user values("+getUserId()+",'"
-                    + getUsername() + "','"
-                    + getPassword() + "','"
-                    + getNama() + "','"
-                    + getFoto() + "','',now(),'"
-                    + getEmail() + "',0)";
             kon.setQuery(sql);
             kon.executeUpdate();
             kon.close();

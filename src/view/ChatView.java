@@ -5,6 +5,7 @@
  */
 package view;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Rectangle;
@@ -13,9 +14,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.border.AbstractBorder;
+import lib.TextBubbleBorder;
 
 /**
  *
@@ -29,11 +33,12 @@ public class ChatView extends javax.swing.JFrame {
     private URL url;
     private Image image;
     private Toolkit format;
+    private int x = 20;
 
     public ChatView() {
         initComponents();
+        conversation = new ArrayList<>();
         chat.requestFocus();
-
     }
 
     @SuppressWarnings("unchecked")
@@ -85,36 +90,46 @@ public class ChatView extends javax.swing.JFrame {
         Rectangle rect = new Rectangle(0, height, 10, 10);
         panel.scrollRectToVisible(rect);
     }
+
     public void sundul() {
         //jScrollPane2.getHorizontalScrollBar().setValue(0);
         panel.revalidate();
         Rectangle rect = new Rectangle(0, 0, 10, 10);
         panel.scrollRectToVisible(rect);
     }
-    
 
-    public void addConversation(JLabel conversation[], boolean z[]) {
-        this.conversation = conversation;
-        int x = 20;
-        for (int i = 0; i < conversation.length; i++) {
-            int pjg = getLongestString(conversation[i].getText(), "`").length();
-            //double d = conversation[i].getPreferredSize().getWidth();
-            int a = (z[i]) ? 340 - (pjg * 8) : 20;
-            System.out.println(pjg);
-            this.conversation[i].setFont(new Font("Consolas", Font.PLAIN, 14));
-            this.panel.add(this.conversation[i], new org.netbeans.lib.awtextra.AbsoluteConstraints(a, x, -1, -1));
-            x += getRowCount(conversation[i].getText(), "`")*15 + 25;
-        }
-        System.out.println("============");
+//    public void addConversation(ArrayList<JLabel> conversation, boolean z[]) {
+//        this.conversation = conversation;
+//        for (int i = 0; i < conversation.size(); i++) {
+//            int pjg = getLongestString(conversation.get(i).getText(), "`").length();
+//            int a = (z[i]) ? 340 - (pjg * 8) : 20;
+//            this.conversation.get(i).setFont(new Font("Consolas", Font.PLAIN, 14));
+//            this.panel.add(this.conversation.get(i), new org.netbeans.lib.awtextra.AbsoluteConstraints(a, x, -1, -1));
+//            x += getRowCount(conversation.get(i).getText(), "`") * 15 + 25;
+//        }
+//    }
+
+    public void addNewChat(String chat,boolean z) {
+        JLabel c = new JLabel(chat);
+        c.setOpaque(true);
+        c.setBackground(Color.white);
+        AbstractBorder brdrLeft = new TextBubbleBorder(Color.BLACK, 1, 5, 5);
+        c.setBorder(brdrLeft);
+        this.conversation.add(c);
+        int pjg = getLongestString(c.getText(), "`").length();
+        int a = (z) ? 340 - (pjg * 8) : 20;
+        c.setFont(new Font("Consolas", Font.PLAIN, 14));
+        this.panel.add(c, new org.netbeans.lib.awtextra.AbsoluteConstraints(a, x, -1, -1));
+        x += getRowCount(c.getText(), "`") * 15 + 25;
     }
-    
-    private int getRowCount(String s, String pisah){
+
+    private int getRowCount(String s, String pisah) {
         s = clean(s);
         String[] a = s.split(pisah);
         return a.length;
     }
-    
-    private String getLongestString(String string,String pisah){
+
+    private String getLongestString(String string, String pisah) {
         string = clean(string);
         String[] a = string.split(pisah);
         string = "";
@@ -123,8 +138,8 @@ public class ChatView extends javax.swing.JFrame {
         }
         return string;
     }
-    
-    private String clean(String s){
+
+    private String clean(String s) {
         s = s.replace("<html>", "").replace("</html>", "");
         s = s.replace("<p>", "").replace("</p>", "`");
         s = s.replace("<br />", "`");
@@ -140,7 +155,7 @@ public class ChatView extends javax.swing.JFrame {
             this.panel.removeAll();
             jScrollPane2.setFocusable(true);
         } catch (Exception e) {
-            System.out.println(e);
+            
         }
     }
 
@@ -152,7 +167,7 @@ public class ChatView extends javax.swing.JFrame {
             ImageIcon ico = new ImageIcon(image);
             foto.setIcon(ico);
         } catch (IOException e) {
-            System.out.println(e);
+            
         }
     }
 
@@ -170,7 +185,7 @@ public class ChatView extends javax.swing.JFrame {
     private javax.swing.JLabel nama;
     private javax.swing.JPanel panel;
     // End of variables declaration//GEN-END:variables
-    private JLabel conversation[];
+    private ArrayList<JLabel> conversation;
 
     public void setNama(String nama) {
         this.nama.setText(nama);
@@ -188,6 +203,7 @@ public class ChatView extends javax.swing.JFrame {
         String chat = "<html>";
         chat += this.chat.getText();
         chat += "</html>";
+        chat = chat.replace("\n", "</p><p>");
         return chat;
     }
 

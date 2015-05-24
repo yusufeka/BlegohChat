@@ -1,9 +1,9 @@
 package model;
 
+import lib.User;
 import lib.Conversation;
 import java.sql.SQLException;
-import javax.swing.JButton;
-import javax.swing.JLabel;
+import java.util.ArrayList;
 import lib.Chat;
 import lib.Koneksi;
 
@@ -14,15 +14,13 @@ import lib.Koneksi;
 public class HomeModel {
 
     private User user;
-    private JLabel nama[];
-    private JLabel foto[];
-    private JLabel lastChat[];
-    private User friendUser[];
+    private ArrayList<User> friendUser;
     private Koneksi kon;
 
     public HomeModel(User user) throws SQLException {
         this.user = user;
         kon = new Koneksi();
+        friendUser = new ArrayList<>();
         String sql = "select user_id_sender,sender.username,sender.nama\n" +
                     "from chat " +
                     "left join user sender on chat.user_id_sender = sender.user_id \n" +
@@ -36,49 +34,19 @@ public class HomeModel {
                     "where user_id_sender = " +user.getUserId();
         kon.setQuery(sql);
         kon.executeQuery();
-        //System.out.println(kon.getRow());
-        nama = new JLabel[kon.getRow()];
-        friendUser = new User[kon.getRow()];
-        int i = 0;
         while (kon.getResult().next()) {
-            nama[i] = new JLabel();
             String uname = kon.getResult().getString("username");
-            friendUser[i] = new User(uname);
-            nama[i++].setText(kon.getResult().getString("nama"));
+            friendUser.add(new User(uname));
         }
-    }
-
-    public JLabel[] getNama() {
-        return nama;
+        kon.close();
     }
     
-    public User[] getFriendUser(){
+    public ArrayList<User> getFriendUser(){
         return friendUser;
-    }
-    
-    public JLabel[] getFoto(){
-        foto = new JLabel[friendUser.length];
-        for (int i = 0; i < foto.length; i++) {
-            foto[i] = new JLabel(friendUser[i].getFoto());
-        }
-        return foto;
-    }
-    
-    public JLabel[] getLastChat() throws SQLException{
-        lastChat = new JLabel[friendUser.length];
-        for (int i = 0; i < lastChat.length; i++) {
-            Conversation c = new Conversation(user, friendUser[i]);
-            Chat[] ch = c.getChat();
-            lastChat[i] = new JLabel(ch[ch.length-1].getIsi());
-        }
-        return lastChat;
     }
     
     public User getUser(){
         return user;
     }
 
-    public void close() throws SQLException{
-        kon.close();
-    }
 }

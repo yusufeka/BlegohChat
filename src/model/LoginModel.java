@@ -6,6 +6,7 @@
 
 package model;
 
+import lib.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import lib.Koneksi;
@@ -16,9 +17,7 @@ import lib.Koneksi;
  */
 public class LoginModel {
     private User user;
-    private boolean isValid;
     private Koneksi kon;
-    private int row;
     
     public LoginModel() {
         kon = new Koneksi();
@@ -28,12 +27,22 @@ public class LoginModel {
         this.user = user;
     }
     
-    public void setIsValid() throws SQLException{
-        isValid = user.isUserExist();
+    public boolean getLogin() throws SQLException{
+        kon = new Koneksi();
+        kon.from("user");
+        kon.where("username = '" + addSlash(user.getUsername()) + "' and password = '" + addSlash(user.getPassword()) + "'");
+        kon.executeQuery();
+        int i = kon.getRow();
+        kon.close();
+        return (i == 1) ? true : false;
     }
     
-    public boolean getLogin(){
-        return isValid;
+    public String addSlash(String s) {
+        String a = "";
+        for (int i = 0; i < s.length(); i++) {
+            a += ("'".equals(s.charAt(i) + "")) ? "\\'" : s.charAt(i);
+        }
+        return a;
     }
     
 }

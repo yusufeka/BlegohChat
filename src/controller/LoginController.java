@@ -9,10 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
-import model.User;
+import lib.User;
+import model.ConfirmModel;
 import model.HomeModel;
 import model.LoginModel;
 import model.RegisterModel;
@@ -38,12 +36,15 @@ public class LoginController {
 
         @Override
         public void actionPerformed(ActionEvent ae) {
-            theView.dispose();
-            RegisterView theView = new RegisterView();
-            RegisterModel theModel = new RegisterModel();
-            RegisterController theController = new RegisterController(theModel, theView);
-            theView.setVisible(true);
+            try {
+                theView.dispose();
+                RegisterView theView = new RegisterView();
+                RegisterModel theModel = new RegisterModel();
+                RegisterController theController = new RegisterController(theModel, theView);
+                theView.setVisible(true);
+            } catch (SQLException ex) {
 
+            }
         }
     }
 
@@ -51,7 +52,6 @@ public class LoginController {
 
         @Override
         public void actionPerformed(ActionEvent ae) {
-            //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             String username, password;
             try {
                 username = theView.getUsername();
@@ -59,24 +59,25 @@ public class LoginController {
                 User user = new User(username);
                 user.setPassword(password);
                 theModel.setUser(user);
-                theModel.setIsValid();
                 boolean isValid = theModel.getLogin();
                 if (isValid) {
                     theView.dispose();
-                    HomeView theView = new HomeView();
-                    theView.setVisible(true);
-                    HomeModel theModel = new HomeModel(user);
-                    HomeController theController = new HomeController(theModel, theView);
+                    if (user.isAktif()) {
+                        HomeView theView = new HomeView();
+                        theView.setVisible(true);
+                        HomeModel theModel = new HomeModel(user);
+                        HomeController theController = new HomeController(theModel, theView);
+                    }else{
+                        ConfirmView theView = new ConfirmView();
+                        theView.setVisible(true);
+                        ConfirmModel theModel = new ConfirmModel(user);
+                        ConfirmController theController = new ConfirmController(theModel, theView);
+                    }
                 } else {
-                    System.out.println(isValid);
-                    JOptionPane.showMessageDialog(theView, "login gagal");
+                    theView.showPopUp("Login gagal");
                 }
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException | SQLException | IOException e) {
 
-            } catch (SQLException ex) {
-                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

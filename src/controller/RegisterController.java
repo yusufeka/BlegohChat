@@ -8,13 +8,13 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.mail.MessagingException;
+import lib.Mail;
+import lib.User;
+import model.ConfirmModel;
 import model.LoginModel;
 import model.RegisterModel;
+import view.ConfirmView;
 import view.LoginView;
 import view.RegisterView;
 
@@ -27,13 +27,14 @@ public class RegisterController {
 
     private RegisterModel theModel;
     private RegisterView theView;
+    private User user;
 
-    RegisterController(RegisterModel theModel, RegisterView theView) {
+    RegisterController(RegisterModel theModel, RegisterView theView) throws SQLException {
         this.theModel = theModel;
         this.theView = theView;
+        user = this.theModel.getUser();
         this.theView.addBrowseListener(new BrowseListener());
         this.theView.addSubmitListener(new SubmitListener());
-        this.theView.addBrowseListener(new BrowseListener());
         this.theView.addSignInListener(new SignInListener());
     }
 
@@ -50,7 +51,6 @@ public class RegisterController {
         @Override
         public void actionPerformed(ActionEvent ae) {
             try {
-                theModel.setUserID();
                 theModel.setEmail(theView.getEmail());
                 theModel.setNama(theView.getNama());
                 theModel.setUsername(theView.getUsername());
@@ -58,18 +58,22 @@ public class RegisterController {
                 theModel.setFoto(theView.getPath());
                 if (theModel.isValid()) {
                     theModel.saveUser();
-                    theModel.uploadFoto(theView.getPath());
+                    if (!theView.getPath().equals("")) {
+                        theModel.uploadFoto(theView.getPath());
+                    }
+                    Mail m = new Mail(theView.getEmail(), theModel.getCode());
+                    m.Send();
                     theView.dispose();
-                    LoginView theView = new LoginView();
-                    LoginModel theModel = new LoginModel();
-                    LoginController theController = new LoginController(theModel, theView);
+                    ConfirmView theView = new ConfirmView();
+                    ConfirmModel theModel = new ConfirmModel(user);
+                    ConfirmController theController =  new ConfirmController(theModel, theView);
                     theView.setVisible(true);
                 }else{
-                    JOptionPane.showMessageDialog(theView, theModel.getPesan());
+                    theView.showPopUp(theModel.getPesan());
                 }
 
-            } catch (SQLException ex) {
-                
+            } catch (SQLException | MessagingException ex) {
+
             }
         }
 

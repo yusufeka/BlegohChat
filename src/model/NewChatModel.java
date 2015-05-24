@@ -5,7 +5,9 @@
  */
 package model;
 
+import lib.User;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import lib.Koneksi;
@@ -18,10 +20,7 @@ public class NewChatModel {
 
     private Koneksi kon;
     private User user;
-    private JLabel nama[];
-    private JLabel foto[];
-    private JLabel status[];
-    private User kontakUser[];
+    private ArrayList<User> kontakUser;
 
     public NewChatModel(User username) throws SQLException {
         this.user = username;
@@ -33,41 +32,17 @@ public class NewChatModel {
                 + "where me.username = '"+user.getUsername()+"'";
         kon.setQuery(sql);
         kon.executeQuery();
-        this.nama = new JLabel[kon.getRow()];
-        this.kontakUser = new User[kon.getRow()];
-        int i = 0;
+        this.kontakUser = new ArrayList<>();
         while(kon.getResult().next()){
-            nama[i] = new JLabel();
-            kontakUser[i] = new User(kon.getResult().getString("kontak_user"));
-            nama[i++].setText(kon.getResult().getString("nama"));
+            kontakUser.add(new User(kon.getResult().getString("kontak_user")));
         }
     }
     
-    public User[] getKontakUser(){
+    public ArrayList<User> getKontakUser(){
         return kontakUser;
-    }
-    
-    public JLabel[] getFoto(){
-        foto = new JLabel[kontakUser.length];
-        for (int i = 0; i < foto.length; i++) {
-            foto[i] = new JLabel(kontakUser[i].getFoto());
-        }
-        return foto;
-    }
-    
-    public JLabel[] getStatus(){
-        status = new JLabel[kontakUser.length];
-        for (int i = 0; i < status.length; i++) {
-            status[i] = new JLabel(kontakUser[i].getStatus());
-        }
-        return status;
     }
 
     public User getUser() {
         return user;
-    }
-    
-    public JLabel[] getNama(){
-        return nama;
     }
 }

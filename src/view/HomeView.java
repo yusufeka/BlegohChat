@@ -5,13 +5,13 @@
  */
 package view;
 
-import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -30,6 +30,8 @@ public class HomeView extends javax.swing.JFrame {
 
     public HomeView() {
         initComponents();
+        btnChat = new ArrayList<>();
+        panel = new ArrayList<>();
         format = Toolkit.getDefaultToolkit();
         Image img = format.getImage(this.getClass().getResource("/ico/gear39.png")).getScaledInstance(20, 20, Image.SCALE_SMOOTH);
         ImageIcon ico = new ImageIcon(img);
@@ -96,48 +98,34 @@ public class HomeView extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JPanel mbok;
     // End of variables declaration//GEN-END:variables
-    private JButton btnChat[];
-    private JLabel nama[];
-    private JPanel panel[];
-    private JLabel foto[];
-    private JLabel lastChat[];
+    private ArrayList<JButton> btnChat;
+    private ArrayList<JPanel> panel;
+    private int a = 10;
 
-    public void addBtnChat(JLabel nama[], JLabel foto[], JLabel lastChat[]) throws IOException {
-        btnChat = new JButton[nama.length];
-        this.nama = nama;
-        panel = new JPanel[nama.length];
-        this.foto = foto;
-        this.lastChat = lastChat;
-        this.add();
-    }
-
-    public void add() throws MalformedURLException, IOException {
-        int a = 10;
-        for (int i = 0; i < btnChat.length; i++) {
-            btnChat[i] = new JButton();
-            btnChat[i].setContentAreaFilled(false);
-            panel[i] = new JPanel(new org.netbeans.lib.awtextra.AbsoluteLayout());
-            panel[i].setBorder(javax.swing.BorderFactory.createEtchedBorder());
-            panel[i].add(foto[i], new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 50, 60));
-            panel[i].add(nama[i], new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, 310, 30));
-            panel[i].add(lastChat[i], new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 30, 310, 30));
-            panel[i].add(btnChat[i],new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 0, 380, 60));
-            mbok.add(panel[i], new org.netbeans.lib.awtextra.AbsoluteConstraints(14, a, 380, 60));
-            url = new URL("http://localhost/chat/" + foto[i].getText());
-            image = ImageIO.read(url).getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-            foto[i].setText("");
-            ImageIcon ico = new ImageIcon(image);
-            foto[i].setIcon(ico);
-            
-            //panel[i].add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 380, 50));
-
-            a += 60;
-        }
-        this.pack();
+    public void addBtnChat(String nama, String foto, String lastChat) throws MalformedURLException, IOException {
+        JButton chat = new JButton();
+        chat.setContentAreaFilled(false);
+        btnChat.add(chat);
+        JLabel namaItem = new JLabel(nama);
+        JLabel fotoItem = new JLabel();
+        url = new URL("http://localhost/chat/" + foto);
+        image = ImageIO.read(url).getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        ImageIcon ico = new ImageIcon(image);
+        fotoItem.setIcon(ico);
+        JLabel lastChatItem = new JLabel(lastChat); //jgn di masukkan arraylist dulu
+        JPanel panelItem = new JPanel(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        panelItem.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        panelItem.add(fotoItem, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 50, 60));
+        panelItem.add(namaItem, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, 310, 30));
+        panelItem.add(lastChatItem, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 30, 310, 30));
+        panelItem.add(chat, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 0, 380, 60));
+        panel.add(panelItem);
+        mbok.add(panelItem, new org.netbeans.lib.awtextra.AbsoluteConstraints(14, a, 380, 60));
+        this.a += 60;
     }
 
     public void addChatListener(int i, ActionListener listener) {
-        btnChat[i].addActionListener(listener);
+        btnChat.get(i).addActionListener(listener);
     }
 
     public void addNewChatListener(ActionListener listener) {

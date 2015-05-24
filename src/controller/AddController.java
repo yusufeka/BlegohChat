@@ -1,17 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.User;
+import lib.User;
 import model.AddModel;
 import model.NewChatModel;
 import view.AddView;
@@ -63,10 +56,8 @@ class AddController {
                 theModel = new NewChatModel(user);
                 NewChatController theController = new NewChatController(theModel, theView);
                 theView.setVisible(true);
-            } catch (SQLException ex) {
+            } catch (SQLException | IOException ex) {
                
-            } catch (IOException ex) {
-                Logger.getLogger(AddController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

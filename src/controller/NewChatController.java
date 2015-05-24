@@ -10,11 +10,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import model.User;
+import lib.User;
 import model.*;
 import view.*;
 
@@ -27,14 +26,10 @@ public class NewChatController {
         this.theModel = theModel;
         this.theView = theView;
         user = this.theModel.getUser();
-        JLabel nama[];
-        nama = this.theModel.getNama();
-        JLabel foto[] = this.theModel.getFoto();
-        JLabel status[] = this.theModel.getStatus();
-        this.theView.addBtnKontak(nama,foto,status);
-        User kontakUser[] = this.theModel.getKontakUser();
-        for (int i = 0; i < nama.length; i++) {
-            this.theView.addChatListener(i, new ChatListener(kontakUser[i]));
+        ArrayList<User> kontakUser = this.theModel.getKontakUser();
+        for (int i = 0; i < kontakUser.size(); i++) {
+            this.theView.addKontak(kontakUser.get(i).getNama(),kontakUser.get(i).getFoto(),kontakUser.get(i).getStatus());
+            this.theView.addChatListener(i, new ChatListener(kontakUser.get(i)));
         }
         this.theView.addBackListener(new BackListener());
         this.theView.addAddListener(new AddListener());

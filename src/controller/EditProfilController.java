@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import model.User;
+import lib.User;
 import model.ProfilModel;
 import view.EditProfilView;
 import view.ProfilView;
@@ -47,10 +47,8 @@ public class EditProfilController {
                 ProfilModel theModel = new ProfilModel(user);
                 ProfilController theController = new ProfilController(theModel, theView);
                 theView.setVisible(true);
-            } catch (SQLException ex) {
-                Logger.getLogger(EditProfilController.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(EditProfilController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException | IOException ex) {
+            
             }
         }
         

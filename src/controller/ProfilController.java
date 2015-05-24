@@ -7,13 +7,16 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
-import model.User;
+import java.sql.SQLException;
+import lib.User;
+import model.ChatModel;
 import model.ProfilModel;
+import model.SettingModel;
+import view.ChatView;
 import view.EditProfilView;
 import view.ProfilView;
+import view.SettingView;
 
 /**
  *
@@ -38,6 +41,7 @@ public class ProfilController {
             this.theView.setFoto(user.getFoto());
             this.theView.addEditListener(new EditListener());
         }
+        this.theView.addBackListener(new BackListener());
     }
 
     class EditListener implements ActionListener {
@@ -50,6 +54,32 @@ public class ProfilController {
             EditProfilController theController = new EditProfilController(theModel, theView);
             theView.setVisible(true);
         }
+    }
+    
+    class BackListener implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            User friendUser = theModel.getFriendUser();
+            if (friendUser != null) {
+                try {
+                    theView.dispose();
+                    ChatView theView = new ChatView();
+                    ChatModel theModel = new ChatModel(user, friendUser);
+                    ChatController theController = new ChatController(theModel, theView);
+                    theView.setVisible(true);
+                } catch (SQLException ex) {
+                    
+                }
+            }else{
+                theView.dispose();
+                SettingView theView = new SettingView();
+                SettingModel theModel = new SettingModel(user);
+                SettingController theController = new SettingController(theModel, theView);
+                theView.setVisible(true);
+            }
+        }
+        
     }
 
 }

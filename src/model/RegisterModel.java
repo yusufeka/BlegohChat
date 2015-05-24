@@ -1,6 +1,7 @@
 /*
- * Author Blegoh aka Yusuf Eka
- * Copyright 2015
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 package model;
 
@@ -9,11 +10,12 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.Random;
 import lib.Koneksi;
+import lib.User;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
-
 
 /**
  *
@@ -23,16 +25,14 @@ public class RegisterModel {
 
     private User user;
     private Koneksi kon;
-    private static final int BUFFER_SIZE = 4096;
-    private boolean isValid;
+    private Random rand;
+    private String confirmCode;
 
-    public RegisterModel() {
+    public RegisterModel() throws SQLException {
         kon = new Koneksi();
         user = new User();
-    }
-    
-    public void setUserID() throws SQLException{
-        user.setUserID();
+        rand = new Random();
+        confirmCode = randomString(6);
     }
 
     public void setUsername(String username) throws SQLException {
@@ -44,7 +44,7 @@ public class RegisterModel {
     }
 
     public void setNama(String nama) {
-        this.user.SetNama(nama);
+        this.user.setNama(nama);
     }
 
     public void setFoto(String foto) {
@@ -100,14 +100,44 @@ public class RegisterModel {
     }
 
     public void saveUser() throws SQLException {
-        user.saveUser();
+        if (user.isValid()) {
+            kon = new Koneksi();
+            String sql = "insert into user values(" + user.getUserId() + ",'"
+                    + user.getUsername() + "','"
+                    + user.getPassword() + "','"
+                    + user.getNama() + "','"
+                    + user.getFoto() + "','',now(),'"
+                    + user.getEmail() + "',0,'"
+                    + getCode() + "')";
+            kon.setQuery(sql);
+            kon.executeUpdate();
+            kon.close();
+        }
+    }
+    
+    //random untuk confirmation code
+    private String randomString(int panjang){
+        String character = "qwertyuiopasdfghjklzxcvbnm123456789";
+        String acak = "";
+        for (int i = 0; i < panjang; i++) {
+            acak += character.charAt(rand.nextInt(character.length()));
+        }
+        return acak;
     }
 
+    public String getCode(){
+        return this.confirmCode;
+    }
+    
     public boolean isValid() {
         return user.isValid();
     }
 
     public String getPesan() {
         return user.getPesan();
+    }
+    
+    public User getUser(){
+        return user;
     }
 }

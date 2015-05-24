@@ -6,6 +6,8 @@
 
 package model;
 
+import lib.User;
+
 /**
  *
  * @author blegoh

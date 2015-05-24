@@ -6,6 +6,7 @@
 
 package model;
 
+import lib.User;
 import java.sql.SQLException;
 import lib.Koneksi;
 

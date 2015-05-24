@@ -6,6 +6,7 @@
 
 package model;
 
+import lib.User;
 import java.sql.SQLException;
 
 /**
@@ -27,7 +28,7 @@ public class ProfilModel {
     }
     
     public void setNama(String nama){
-        this.user.SetNama(nama);
+        this.user.setNama(nama);
     }
     
     public void saveUser() throws SQLException{

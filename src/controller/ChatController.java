@@ -1,19 +1,16 @@
 package controller;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JLabel;
-import javax.swing.border.AbstractBorder;
 import lib.Chat;
-import lib.TextBubbleBorder;
-import model.User;
+import lib.User;
 import model.ChatModel;
 import model.HomeModel;
 import model.ProfilModel;
@@ -29,8 +26,8 @@ public class ChatController {
 
     private ChatModel theModel;
     private ChatView theView;
-    private JLabel conversation[];
-    private boolean isSender[];
+    private ArrayList<String> conversation;
+    private ArrayList<Boolean> isSender;
     private User user;
     private User friendUser;
 
@@ -42,29 +39,25 @@ public class ChatController {
         this.theView.setLastSeen(theModel.getLastSeen());
         this.friendUser = theModel.getFriendUser();
         this.theView.addFoto(friendUser.getFoto());
-        this.refreshConversation();
+        this.addConversation();
         this.theView.sundul();
         this.theView.injek();
         this.theView.addSendListener(new SendListener());
         this.theView.addFotoListener(new FotoListener());
         this.theView.detailListener(new DetailListener());
     }
-    
-    public void refreshConversation() {
-        Chat[] conv = theModel.getConversation().getChat();
-        conversation = new JLabel[conv.length];
-        isSender = new boolean[conv.length];
-        for (int i = 0; i < conv.length; i++) {
-            conversation[i] = new JLabel(conv[i].getIsi());
-            conversation[i].setOpaque(true);
-            conversation[i].setBackground(Color.white);
-            AbstractBorder brdrLeft = new TextBubbleBorder(Color.BLACK, 1, 5, 5);
-            conversation[i].setBorder(brdrLeft);
+
+    public void addConversation() {
+        ArrayList<Chat> conv = theModel.getConversation().getChat();
+        conversation = new ArrayList<>();
+        isSender = new ArrayList<>();
+        for (int i = 0; i < conv.size(); i++) {
+            conversation.add(conv.get(i).getIsi());
             int userId = this.user.getUserId();
-            int senderId = conv[i].getSender().getUserId();
-            isSender[i] = (userId == senderId) ? true : false;
+            int senderId = conv.get(i).getSender().getUserId();
+            isSender.add((userId == senderId) ? true : false);
+            theView.addNewChat(conversation.get(i), isSender.get(i));
         }
-        theView.addConversation(conversation, isSender);
     }
 
     class SendListener implements ActionListener {
@@ -72,13 +65,13 @@ public class ChatController {
         @Override
         public void actionPerformed(ActionEvent ae) {
             try {
-                theModel.chat(theView.getChat());
+                String isi = theView.getChat();
                 theView.clearChat();
-                theView.removeConversation();
-                refreshConversation();
-                theView.sundul();
+                theView.addNewChat(isi, true);
+                theView.injek();
+                theModel.chat(isi);
             } catch (SQLException ex) {
-                System.out.println(ex);
+
             }
 
         }
@@ -97,10 +90,8 @@ public class ChatController {
                 theModel = new HomeModel(user);
                 HomeController theController = new HomeController(theModel, theView);
                 theView.setVisible(true);
-            } catch (SQLException ex) {
-                Logger.getLogger(ChatController.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(ChatController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException | IOException ex) {
+
             }
 
         }
@@ -118,7 +109,7 @@ public class ChatController {
                 ProfilController theController = new ProfilController(theModel, theView);
                 theView.setVisible(true);
             } catch (IOException ex) {
-                Logger.getLogger(ChatController.class.getName()).log(Level.SEVERE, null, ex);
+
             }
         }
     }

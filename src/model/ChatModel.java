@@ -5,6 +5,7 @@
  */
 package model;
 
+import lib.User;
 import lib.Conversation;
 import java.sql.SQLException;
 import lib.Koneksi;

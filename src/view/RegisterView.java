@@ -8,6 +8,7 @@ package view;
 import java.awt.event.ActionListener;
 import java.io.File;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -216,6 +217,10 @@ public class RegisterView extends javax.swing.JFrame {
         } else {
             
         }
+    }
+    
+    public void showPopUp(String msg){
+        JOptionPane.showMessageDialog(this, msg);
     }
     
     

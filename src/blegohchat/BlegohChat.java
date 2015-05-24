@@ -11,7 +11,7 @@ import view.LoginView;
  */
 public class BlegohChat {
 
-    public static void main(String[] args) {
+    public static void main(String[] args){
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -22,6 +22,7 @@ public class BlegohChat {
         }catch(Exception e){
             
         }
+        
         LoginView theView = new LoginView();
         LoginModel theModel = new LoginModel();
         LoginController theController = new LoginController(theModel, theView);

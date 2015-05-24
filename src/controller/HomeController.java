@@ -1,18 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JLabel;
-import model.User;
+import lib.Chat;
+import lib.Conversation;
+import lib.User;
 import model.*;
 import view.*;
 
@@ -31,18 +28,19 @@ public class HomeController {
         this.theView = theView;
         this.user = this.theModel.getUser();
         this.theView.addNewChatListener(new NewChatListener());
-        JLabel nama[];
-        User friendUser[];
-        friendUser = this.theModel.getFriendUser();
-        nama = this.theModel.getNama();
-        JLabel foto[] = theModel.getFoto();
-        JLabel lastChat[] = theModel.getLastChat();
-        theView.addBtnChat(nama,foto,lastChat);
-        for (int i = 0; i < nama.length; i++) {
-            this.theView.addChatListener(i, new ChatListener(friendUser[i]));
+        ArrayList<User> friendUser = this.theModel.getFriendUser();
+        for (int i = 0; i < friendUser.size(); i++) {
+            Conversation c = new Conversation(user, friendUser.get(i));
+            Chat ch = c.getChat().get(c.getChat().size()-1);
+            String lastChat = ch.getIsi();
+            this.theView.addBtnChat(friendUser.get(i).getNama(),friendUser.get(i).getFoto(), lastChat);
+            this.theView.addChatListener(i, new ChatListener(friendUser.get(i)));
         }
         this.theView.addSettingListener(new SettingListener());
-        this.theModel.close();
+    }
+    
+    public HomeController(HomeModel theModel, HomeView theView,ArrayList<String> nama){
+        
     }
 
     class SettingListener implements ActionListener {
@@ -77,7 +75,7 @@ public class HomeController {
                 ChatController theController = new ChatController(theModel, theView);
                 theView.setVisible(true);
             } catch (SQLException ex) {
-                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+            
             }
 
         }
@@ -89,16 +87,13 @@ public class HomeController {
         @Override
         public void actionPerformed(ActionEvent ae) {
             try {
-                theModel.close();
                 theView.dispose();
                 NewChatView theView = new NewChatView();
                 NewChatModel theModel = new NewChatModel(user);
                 NewChatController theController = new NewChatController(theModel, theView);
                 theView.setVisible(true);
-            } catch (SQLException e) {
-                //System.out.println(e);
-            } catch (IOException ex) {
-                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException | IOException e) {
+                
             }
         }
     }
