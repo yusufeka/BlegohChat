@@ -102,37 +102,6 @@ public class NewChatView extends javax.swing.JFrame {
         a+=60;
     }
     
-//    public void addBtnKontak(JLabel nama[],JLabel foto[],JLabel status[]) throws IOException{
-//        this.nama = nama;
-//        btnKontak = new JButton[nama.length];
-//        this.foto = foto;
-//        this.status = status;
-//        panel = new JPanel[nama.length];
-//        this.add();
-//    }
-//    
-//    public void add() throws MalformedURLException, IOException{
-//        int a = 10;
-//        for (int i = 0; i < btnKontak.length; i++) {
-//            btnKontak[i] = new JButton();
-//            btnKontak[i].setContentAreaFilled(false);
-//            panel[i] = new JPanel(new org.netbeans.lib.awtextra.AbsoluteLayout());
-//            panel[i].setBorder(javax.swing.BorderFactory.createEtchedBorder());
-//            panel[i].add(foto[i], new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 50, 60));
-//            panel[i].add(nama[i], new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, 310, 30));
-//            panel[i].add(status[i], new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 30, 310, 30));
-//            panel[i].add(btnKontak[i],new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 0, 380, 60));
-//            mbok.add(panel[i], new org.netbeans.lib.awtextra.AbsoluteConstraints(14, a, 380, 60));
-//            url = new URL("http://localhost/chat/" + foto[i].getText());
-//            image = ImageIO.read(url).getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-//            foto[i].setText("");
-//            ImageIcon ico = new ImageIcon(image);
-//            foto[i].setIcon(ico);
-//            a+=60;
-//        }
-//        this.pack();
-//    }
-    
     public void addChatListener(int i, ActionListener listener) {
         btnKontak.get(i).addActionListener(listener);
     }

@@ -30,26 +30,24 @@ import view.SettingView;
 public class SettingController {
 
     private SettingModel theModel;
-    private SettingView theSettingView;
-    private AccountSettingView theAccountSettingView;
-    
+    private SettingView theView;
     private User user;
 
     SettingController(SettingModel theModel, SettingView theView) {
         this.theModel = theModel;
-        this.theSettingView = theView;
+        this.theView = theView;
         user = this.theModel.getUser();
-        this.theSettingView.addLogOutListener(new LogOutListener());
-        this.theSettingView.addProfilListener(new ProfilListener());
-        this.theSettingView.addHelpListener(new HelpListener());
-        this.theSettingView.addAccountListener(new AccountListener());
+        this.theView.addLogOutListener(new LogOutListener());
+        this.theView.addProfilListener(new ProfilListener());
+        this.theView.addHelpListener(new HelpListener());
+        this.theView.addAccountListener(new AccountListener());
     }
 
     class LogOutListener extends MouseAdapter {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            theSettingView.dispose();
+            theView.dispose();
             LoginView theView = new LoginView();
             LoginModel theModel = new LoginModel();
             LoginController theController = new LoginController(theModel, theView);
@@ -62,7 +60,7 @@ public class SettingController {
         @Override
         public void mouseClicked(MouseEvent e) {
             try {
-                theSettingView.dispose();
+                theView.dispose();
                 ProfilView theView = new ProfilView();
                 ProfilModel theModel = new ProfilModel(user);
                 ProfilController theController = new ProfilController(theModel, theView);
@@ -77,7 +75,7 @@ public class SettingController {
     class HelpListener extends MouseAdapter{
         @Override
         public void mouseClicked(MouseEvent e) {
-            theSettingView.dispose();
+            theView.dispose();
             HelpView theView = new HelpView();
             HelpController theController = new HelpController(theModel, theView);
             theView.setVisible(true);
@@ -87,9 +85,10 @@ public class SettingController {
     class AccountListener extends MouseAdapter{
         @Override
         public void mouseClicked(MouseEvent e) {
-            theSettingView.dispose();
-            theAccountSettingView = new AccountSettingView();
-            theAccountSettingView.setVisible(true);
+            theView.dispose();
+            AccountSettingView theView = new AccountSettingView();
+            AccountSettingController theController = new AccountSettingController(theModel, theView);
+            theView.setVisible(true);
         }
     }
     
@@ -97,7 +96,7 @@ public class SettingController {
         @Override
         public void mouseClicked(MouseEvent e) {
             try {
-                theSettingView.dispose();
+                theView.dispose();
                 HomeView theView = new HomeView();
                 HomeModel theModel = new HomeModel(user);
                 HomeController theController = new HomeController(theModel, theView);

@@ -97,18 +97,7 @@ public class ChatView extends javax.swing.JFrame {
         Rectangle rect = new Rectangle(0, 0, 10, 10);
         panel.scrollRectToVisible(rect);
     }
-
-//    public void addConversation(ArrayList<JLabel> conversation, boolean z[]) {
-//        this.conversation = conversation;
-//        for (int i = 0; i < conversation.size(); i++) {
-//            int pjg = getLongestString(conversation.get(i).getText(), "`").length();
-//            int a = (z[i]) ? 340 - (pjg * 8) : 20;
-//            this.conversation.get(i).setFont(new Font("Consolas", Font.PLAIN, 14));
-//            this.panel.add(this.conversation.get(i), new org.netbeans.lib.awtextra.AbsoluteConstraints(a, x, -1, -1));
-//            x += getRowCount(conversation.get(i).getText(), "`") * 15 + 25;
-//        }
-//    }
-
+    
     public void addNewChat(String chat,boolean z) {
         JLabel c = new JLabel(chat);
         c.setOpaque(true);

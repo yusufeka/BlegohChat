@@ -8,6 +8,8 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.mail.MessagingException;
 import lib.Mail;
 import lib.User;
@@ -61,18 +63,27 @@ public class RegisterController {
                     if (!theView.getPath().equals("")) {
                         theModel.uploadFoto(theView.getPath());
                     }
-                    Mail m = new Mail(theView.getEmail(), theModel.getCode());
-                    m.Send();
+                    new Thread() {
+                        @Override
+                        public void run() {
+                            try {
+                                Mail m = new Mail(theView.getEmail(), theModel.getCode());
+                                m.Send();
+                            } catch (MessagingException ex) {
+                            
+                            }
+                        }
+                    }.start();
                     theView.dispose();
                     ConfirmView theView = new ConfirmView();
                     ConfirmModel theModel = new ConfirmModel(user);
-                    ConfirmController theController =  new ConfirmController(theModel, theView);
+                    ConfirmController theController = new ConfirmController(theModel, theView);
                     theView.setVisible(true);
-                }else{
+                } else {
                     theView.showPopUp(theModel.getPesan());
                 }
 
-            } catch (SQLException | MessagingException ex) {
+            } catch (SQLException ex) {
 
             }
         }
