@@ -121,6 +121,7 @@ public class HomeView extends javax.swing.JFrame {
         panelItem.add(chat, new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 0, 380, 60));
         panel.add(panelItem);
         mbok.add(panelItem, new org.netbeans.lib.awtextra.AbsoluteConstraints(14, a, 380, 60));
+        mbok.revalidate();
         this.a += 60;
     }
 

@@ -38,6 +38,20 @@ public class Chat {
         return isi;
     }
     
+    public String getFirstSentence() {
+        String string = clean(isi);
+        String[] a = string.split("`");
+        string = a[0];
+        return string;
+    }
+
+    private String clean(String s) {
+        s = s.replace("<html>", "").replace("</html>", "");
+        s = s.replace("<p>", "").replace("</p>", "`");
+        s = s.replace("<br />", "`");
+        return s;
+    }
+    
     public String getChatTime(){
         return chatTime;
     }

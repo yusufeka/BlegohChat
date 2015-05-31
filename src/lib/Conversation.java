@@ -2,8 +2,6 @@ package lib;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import lib.Chat;
-import lib.Koneksi;
 
 /**
  *

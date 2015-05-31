@@ -70,7 +70,7 @@ public class RegisterController {
                                 Mail m = new Mail(theView.getEmail(), theModel.getCode());
                                 m.Send();
                             } catch (MessagingException ex) {
-                            
+                                ex.printStackTrace();
                             }
                         }
                     }.start();
@@ -84,7 +84,7 @@ public class RegisterController {
                 }
 
             } catch (SQLException ex) {
-
+                ex.printStackTrace();
             }
         }
 

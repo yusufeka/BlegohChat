@@ -9,8 +9,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import lib.User;
 import model.HomeModel;
 import model.LoginModel;
@@ -41,6 +39,7 @@ public class SettingController {
         this.theView.addProfilListener(new ProfilListener());
         this.theView.addHelpListener(new HelpListener());
         this.theView.addAccountListener(new AccountListener());
+        this.theView.addBackListener(new BackListener());
     }
 
     class LogOutListener extends MouseAdapter {
@@ -66,7 +65,7 @@ public class SettingController {
                 ProfilController theController = new ProfilController(theModel, theView);
                 theView.setVisible(true);
             } catch (IOException ex) {
-            
+                ex.printStackTrace();
             }
 
         }
@@ -102,7 +101,7 @@ public class SettingController {
                 HomeController theController = new HomeController(theModel, theView);
                 theView.setVisible(true);
             } catch (SQLException | IOException ex) {
-            
+                ex.printStackTrace();
             }
         }
     }

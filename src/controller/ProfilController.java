@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controller;
 
 import java.awt.event.ActionEvent;
@@ -69,7 +64,7 @@ public class ProfilController {
                     ChatController theController = new ChatController(theModel, theView);
                     theView.setVisible(true);
                 } catch (SQLException ex) {
-                    
+                   ex.printStackTrace();
                 }
             }else{
                 theView.dispose();

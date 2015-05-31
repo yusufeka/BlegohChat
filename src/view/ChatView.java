@@ -90,13 +90,6 @@ public class ChatView extends javax.swing.JFrame {
         Rectangle rect = new Rectangle(0, height, 10, 10);
         panel.scrollRectToVisible(rect);
     }
-
-    public void sundul() {
-        //jScrollPane2.getHorizontalScrollBar().setValue(0);
-        panel.revalidate();
-        Rectangle rect = new Rectangle(0, 0, 10, 10);
-        panel.scrollRectToVisible(rect);
-    }
     
     public void addNewChat(String chat,boolean z) {
         JLabel c = new JLabel(chat);
@@ -109,6 +102,7 @@ public class ChatView extends javax.swing.JFrame {
         int a = (z) ? 340 - (pjg * 8) : 20;
         c.setFont(new Font("Consolas", Font.PLAIN, 14));
         this.panel.add(c, new org.netbeans.lib.awtextra.AbsoluteConstraints(a, x, -1, -1));
+        this.panel.revalidate();
         x += getRowCount(c.getText(), "`") * 15 + 25;
     }
 

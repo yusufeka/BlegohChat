@@ -37,7 +37,7 @@ class AddController {
                 theModel.setKontak(kontak);
                 theModel.saveKontak();
             } catch (SQLException ex) {
-
+                ex.printStackTrace();
             }
             theView.clear();
         }
@@ -57,7 +57,7 @@ class AddController {
                 NewChatController theController = new NewChatController(theModel, theView);
                 theView.setVisible(true);
             } catch (SQLException | IOException ex) {
-               
+               ex.printStackTrace();
             }
         }
     }

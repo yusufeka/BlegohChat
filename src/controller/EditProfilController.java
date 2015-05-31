@@ -48,7 +48,7 @@ public class EditProfilController {
                 ProfilController theController = new ProfilController(theModel, theView);
                 theView.setVisible(true);
             } catch (SQLException | IOException ex) {
-            
+                ex.printStackTrace();
             }
         }
         

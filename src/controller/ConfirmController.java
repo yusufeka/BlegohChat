@@ -53,7 +53,7 @@ public class ConfirmController {
                     theView.showPopUp("Kode salah");
                 }
             } catch (SQLException | IOException ex) {
-
+                ex.printStackTrace();
             }
         }
 
@@ -69,7 +69,7 @@ public class ConfirmController {
                         Mail m = new Mail(user.getEmail(), user.getCode());
                         m.Send();
                     } catch (MessagingException ex) {
-
+                        ex.printStackTrace();
                     }
                 }
             }.start();

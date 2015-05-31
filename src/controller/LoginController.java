@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package controller;
 
 import java.awt.event.ActionEvent;
@@ -52,32 +47,30 @@ public class LoginController {
 
         @Override
         public void actionPerformed(ActionEvent ae) {
-            String username, password;
             try {
-                username = theView.getUsername();
-                password = theView.getPassword();
-                User user = new User(username);
-                user.setPassword(password);
-                theModel.setUser(user);
+                theModel.setUsername(theView.getUsername());
+                theModel.setPassword(theView.getPassword());
                 boolean isValid = theModel.getLogin();
                 if (isValid) {
                     theView.dispose();
+                    User user = theModel.getUser();
                     if (user.isAktif()) {
                         HomeView theView = new HomeView();
                         theView.setVisible(true);
                         HomeModel theModel = new HomeModel(user);
                         HomeController theController = new HomeController(theModel, theView);
-                    }else{
+                    } else {
                         ConfirmView theView = new ConfirmView();
                         theView.setVisible(true);
                         ConfirmModel theModel = new ConfirmModel(user);
                         ConfirmController theController = new ConfirmController(theModel, theView);
                     }
                 } else {
-                    theView.showPopUp("Login gagal");
+                    theView.showPopUp(theModel.getMsg());
                 }
-            } catch (NumberFormatException | SQLException | IOException e) {
 
+            } catch (NumberFormatException | SQLException | IOException e) {
+                e.printStackTrace();
             }
         }
     }

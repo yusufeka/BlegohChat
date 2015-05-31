@@ -39,24 +39,52 @@ public class ChatController {
         this.theView.setLastSeen(theModel.getLastSeen());
         this.friendUser = theModel.getFriendUser();
         this.theView.addFoto(friendUser.getFoto());
-        this.addConversation();
-        this.theView.sundul();
-        this.theView.injek();
+        conversation = new ArrayList<>();
+        isSender = new ArrayList<>();
+        AddConversation ac = new AddConversation();
+        ac.start();
         this.theView.addSendListener(new SendListener());
         this.theView.addFotoListener(new FotoListener());
         this.theView.detailListener(new DetailListener());
     }
 
-    public void addConversation() {
-        ArrayList<Chat> conv = theModel.getConversation().getChat();
-        conversation = new ArrayList<>();
-        isSender = new ArrayList<>();
-        for (int i = 0; i < conv.size(); i++) {
-            conversation.add(conv.get(i).getIsi());
-            int userId = this.user.getUserId();
-            int senderId = conv.get(i).getSender().getUserId();
-            isSender.add((userId == senderId) ? true : false);
-            theView.addNewChat(conversation.get(i), isSender.get(i));
+    class Refresher extends Thread {
+
+        @Override
+        public void run() {
+            try {
+                while (true) {
+                    theModel.refreshConversation();
+                    int real = theModel.getConversation().getChat().size();
+                    int current = conversation.size();
+                    if (real > current) {
+                        String c = theModel.getNewFriendChat(current);
+                        conversation.add(c);
+                        theView.addNewChat(c, false);
+                        theView.injek();
+                    }
+                    sleep(5);
+                }
+            } catch (SQLException | InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    class AddConversation extends Thread {
+
+        @Override
+        public void run() {
+            ArrayList<Chat> conv = theModel.getConversation().getChat();
+            for (int i = 0; i < conv.size(); i++) {
+                conversation.add(conv.get(i).getIsi());
+                int userId = user.getUserId();
+                int senderId = conv.get(i).getSender().getUserId();
+                isSender.add((userId == senderId) ? true : false);
+                theView.addNewChat(conversation.get(i), isSender.get(i));
+                theView.injek();
+            }
+            new Refresher().start();
         }
     }
 
@@ -69,9 +97,10 @@ public class ChatController {
                 theView.clearChat();
                 theView.addNewChat(isi, true);
                 theView.injek();
+                conversation.add(isi);
                 theModel.chat(isi);
             } catch (SQLException ex) {
-
+                ex.printStackTrace();
             }
 
         }

@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package controller;
 
 import java.awt.event.ActionEvent;
@@ -18,23 +17,36 @@ import model.*;
 import view.*;
 
 public class NewChatController {
+
     private NewChatModel theModel;
     private NewChatView theView;
     private User user;
+    private ArrayList<User> kontakUser;
 
     public NewChatController(NewChatModel theModel, NewChatView theView) throws IOException {
         this.theModel = theModel;
         this.theView = theView;
         user = this.theModel.getUser();
-        ArrayList<User> kontakUser = this.theModel.getKontakUser();
-        for (int i = 0; i < kontakUser.size(); i++) {
-            this.theView.addKontak(kontakUser.get(i).getNama(),kontakUser.get(i).getFoto(),kontakUser.get(i).getStatus());
-            this.theView.addChatListener(i, new ChatListener(kontakUser.get(i)));
-        }
+        kontakUser = this.theModel.getKontakUser();
+        new AddContact().start();
         this.theView.addBackListener(new BackListener());
         this.theView.addAddListener(new AddListener());
     }
-    
+
+    class AddContact extends Thread {
+
+        public void run() {
+            for (int i = 0; i < kontakUser.size(); i++) {
+                try {
+                    theView.addKontak(kontakUser.get(i).getNama(), kontakUser.get(i).getFoto(), kontakUser.get(i).getStatus());
+                    theView.addChatListener(i, new ChatListener(kontakUser.get(i)));
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
+
     class ChatListener implements ActionListener {
 
         private User kontakUser;
@@ -53,14 +65,14 @@ public class NewChatController {
                 ChatController theController = new ChatController(theModel, theView);
                 theView.setVisible(true);
             } catch (Exception ex) {
-                System.out.println(ex);
+                ex.printStackTrace();
             }
 
         }
 
     }
-    
-    class AddListener implements ActionListener{
+
+    class AddListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent ae) {
@@ -70,10 +82,10 @@ public class NewChatController {
             AddController theController = new AddController(theModel, theView);
             theView.setVisible(true);
         }
-        
+
     }
-    
-    class BackListener implements ActionListener{
+
+    class BackListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent ae) {
@@ -81,13 +93,11 @@ public class NewChatController {
             try {
                 HomeView theView = new HomeView();
                 HomeModel theModel = new HomeModel(user);
-                System.out.println("as "+user.getUsername());
+                System.out.println("as " + user.getUsername());
                 HomeController theController = new HomeController(theModel, theView);
                 theView.setVisible(true);
-            } catch (SQLException ex) {
-                System.out.println(ex);
-            } catch (IOException ex) {
-                Logger.getLogger(NewChatController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException | IOException ex) {
+                ex.printStackTrace();
             }
         }
     }

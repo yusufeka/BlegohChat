@@ -26,10 +26,10 @@
           <Group type="102" attributes="0">
               <EmptySpace max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jLabel1" alignment="0" min="-2" pref="264" max="-2" attributes="0"/>
-                  <Component id="jLabel2" alignment="0" min="-2" pref="264" max="-2" attributes="0"/>
-                  <Component id="jLabel3" alignment="0" min="-2" pref="264" max="-2" attributes="0"/>
-                  <Component id="jLabel4" alignment="0" min="-2" pref="264" max="-2" attributes="0"/>
+                  <Component id="username" alignment="0" min="-2" pref="264" max="-2" attributes="0"/>
+                  <Component id="password" alignment="0" min="-2" pref="264" max="-2" attributes="0"/>
+                  <Component id="delete" alignment="0" min="-2" pref="264" max="-2" attributes="0"/>
+                  <Component id="usage" alignment="0" min="-2" pref="264" max="-2" attributes="0"/>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel6" min="-2" pref="39" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -43,13 +43,13 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jLabel1" min="-2" pref="50" max="-2" attributes="0"/>
+              <Component id="username" min="-2" pref="50" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jLabel2" min="-2" pref="50" max="-2" attributes="0"/>
+              <Component id="password" min="-2" pref="50" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jLabel3" min="-2" pref="50" max="-2" attributes="0"/>
+              <Component id="delete" min="-2" pref="50" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jLabel4" min="-2" pref="50" max="-2" attributes="0"/>
+              <Component id="usage" min="-2" pref="50" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="back" alignment="3" min="-2" pref="50" max="-2" attributes="0"/>
@@ -61,22 +61,22 @@
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JLabel" name="jLabel1">
+    <Component class="javax.swing.JLabel" name="username">
       <Properties>
         <Property name="text" type="java.lang.String" value="Change Username"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel2">
+    <Component class="javax.swing.JLabel" name="password">
       <Properties>
         <Property name="text" type="java.lang.String" value="Change Password"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel3">
+    <Component class="javax.swing.JLabel" name="delete">
       <Properties>
         <Property name="text" type="java.lang.String" value="Delete My Account"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel4">
+    <Component class="javax.swing.JLabel" name="usage">
       <Properties>
         <Property name="text" type="java.lang.String" value="Network Usage"/>
       </Properties>

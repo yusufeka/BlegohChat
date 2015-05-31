@@ -28,8 +28,16 @@ public class ChatModel {
         convertation = new Conversation(user, friendUser);
     }
     
+    public void refreshConversation() throws SQLException{
+        convertation = new Conversation(user, friendUser);
+    }
+    
     public Conversation getConversation(){
         return convertation;
+    }
+    
+    public String getNewFriendChat(int i){
+        return convertation.getChat().get(i).getIsi();
     }
     
     public User getUser(){

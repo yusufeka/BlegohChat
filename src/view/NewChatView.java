@@ -99,6 +99,7 @@ public class NewChatView extends javax.swing.JFrame {
         p.add(btn,new org.netbeans.lib.awtextra.AbsoluteConstraints(2, 0, 380, 60));
         panel.add(p);
         mbok.add(p, new org.netbeans.lib.awtextra.AbsoluteConstraints(14, a, 380, 60));
+        mbok.revalidate();
         a+=60;
     }
     
