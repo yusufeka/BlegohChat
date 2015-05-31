@@ -12,24 +12,6 @@ import view.LoginView;
  */
 public class BlegohChat {
 
-    public static void runSystemCommand(String command) {
-
-        try {
-            Process p = Runtime.getRuntime().exec(command);
-            BufferedReader inputStream = new BufferedReader(
-                    new InputStreamReader(p.getInputStream()));
-
-            String s = "";
-            // reading output stream of the command
-            while ((s = inputStream.readLine()) != null) {
-                System.out.println(s);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     public static void main(String[] args) {
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -46,6 +28,8 @@ public class BlegohChat {
         LoginModel theModel = new LoginModel();
         LoginController theController = new LoginController(theModel, theView);
         theView.setVisible(true);
+        String asu = theView.getClass().toString();
+        System.out.println(asu);
     }
 
 }
