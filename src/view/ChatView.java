@@ -26,10 +26,7 @@ import lib.TextBubbleBorder;
  * @author blegoh
  */
 public class ChatView extends javax.swing.JFrame {
-
-    /**
-     * Creates new form Chat
-     */
+    
     private URL url;
     private Image image;
     private Toolkit format;
@@ -53,15 +50,16 @@ public class ChatView extends javax.swing.JFrame {
         chat = new javax.swing.JTextArea();
         btnSend = new javax.swing.JButton();
         foto = new javax.swing.JLabel();
+        hapusChat = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         nama.setText("Nama");
-        getContentPane().add(nama, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 10, 320, -1));
+        getContentPane().add(nama, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 10, 270, -1));
 
         lastSeen.setText("Last Seen");
-        getContentPane().add(lastSeen, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 40, 310, -1));
+        getContentPane().add(lastSeen, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 40, 270, -1));
 
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
@@ -80,6 +78,9 @@ public class ChatView extends javax.swing.JFrame {
         btnSend.setText("Send");
         getContentPane().add(btnSend, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 270, 60, 90));
         getContentPane().add(foto, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 50, 50));
+
+        hapusChat.setText("X");
+        getContentPane().add(hapusChat, new org.netbeans.lib.awtextra.AbsoluteConstraints(342, 10, 50, 50));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -153,15 +154,21 @@ public class ChatView extends javax.swing.JFrame {
             
         }
     }
+    
 
     public void addFotoListener(MouseAdapter listener) {
         foto.addMouseListener(listener);
+    }
+    
+    public void addHapusChatListener(ActionListener listener){
+        hapusChat.addActionListener(listener);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSend;
     private javax.swing.JTextArea chat;
     private javax.swing.JLabel foto;
+    private javax.swing.JButton hapusChat;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lastSeen;

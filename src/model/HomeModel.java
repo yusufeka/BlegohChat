@@ -29,7 +29,7 @@ public class HomeModel {
                 + "where (user_id_receiver = " + user.getUserId() + " and user_id_sender = c.user_id_sender) or\n"
                 + "(user_id_receiver = c.user_id_sender and user_id_sender = " + user.getUserId() + ")\n"
                 + ") time\n"
-                + table + "where user_id_receiver = " + user.getUserId() +"\n"
+                + table + "where user_id_receiver = " + user.getUserId() +" and is_receiver_delete = 0 \n"
                 + "group by user_id_sender,sender.username ,sender.nama\n"
                 + "union \n"
                 + "select user_id_receiver,receiver.username,receiver.nama,\n"
@@ -38,9 +38,10 @@ public class HomeModel {
                 + "where (user_id_sender = " + user.getUserId() + " and user_id_receiver = c.user_id_receiver) or\n"
                 + "(user_id_sender = c.user_id_receiver and user_id_receiver = " + user.getUserId() + " )\n"
                 + ") time\n"
-                + table + "where user_id_sender = " + user.getUserId()+"\n"
+                + table + "where user_id_sender = " + user.getUserId()+" and is_sender_delete = 0 \n"
                 + "group by user_id_receiver,receiver.username,receiver.nama\n"
                 + "order by time desc";
+        System.out.println(sql);
         kon.setQuery(sql);
         kon.executeQuery();
         while (kon.getResult().next()) {

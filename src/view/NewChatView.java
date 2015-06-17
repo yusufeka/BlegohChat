@@ -3,6 +3,7 @@ package view;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -27,6 +28,7 @@ public class NewChatView extends javax.swing.JFrame {
         initComponents();
         btnKontak = new ArrayList<>();
         panel = new ArrayList<>();
+        nama = new ArrayList<>();
         format = Toolkit.getDefaultToolkit();
     }
 
@@ -79,6 +81,7 @@ public class NewChatView extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     private ArrayList<JButton> btnKontak;
     private ArrayList<JPanel> panel;
+    private ArrayList<String> nama;
     private int a = 10;
     
     public void addKontak(String nama, String foto, String status) throws MalformedURLException, IOException{
@@ -90,6 +93,7 @@ public class NewChatView extends javax.swing.JFrame {
         ImageIcon ico = new ImageIcon(image);
         JLabel ft = new JLabel(ico);
         JLabel nm = new JLabel(nama);
+        this.nama.add(nama.trim());
         JLabel st = new JLabel(status);
         JPanel p = new JPanel(new org.netbeans.lib.awtextra.AbsoluteLayout());
         p.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -101,6 +105,44 @@ public class NewChatView extends javax.swing.JFrame {
         mbok.add(p, new org.netbeans.lib.awtextra.AbsoluteConstraints(14, a, 380, 60));
         mbok.revalidate();
         a+=60;
+    }
+    
+    public String getCari(){
+        return txtSearch.getText().trim();
+    }
+
+    private void removeKontak(){
+        mbok.removeAll();
+        mbok.repaint();
+        mbok.revalidate();
+        a = 10;
+    }
+    
+    public void cariNama(String nama){
+        removeKontak();
+        for (int i = 0; i < this.nama.size(); i++) {
+            if (isFound(this.nama.get(i), nama)) {
+                mbok.add(panel.get(i),new org.netbeans.lib.awtextra.AbsoluteConstraints(14, a, 380, 60));
+                this.a += 60;
+            }
+        }
+        mbok.repaint();
+        mbok.revalidate();
+    }
+    
+    private boolean isFound(String haystack, String needle){
+        int a = -1;
+        for (int i = 0; i <= haystack.length() - needle.length(); i++) {
+            if (haystack.substring(i, i+ needle.length()).equalsIgnoreCase(needle)) {
+                a = i;
+                break;
+            }
+        }
+        return (a > -1) ? true: false;
+    }
+    
+    public void addCariListener(KeyAdapter listener){
+        txtSearch.addKeyListener(listener);
     }
     
     public void addChatListener(int i, ActionListener listener) {

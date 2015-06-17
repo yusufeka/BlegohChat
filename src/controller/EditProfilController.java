@@ -10,8 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import lib.User;
 import model.ProfilModel;
 import view.EditProfilView;
@@ -33,6 +31,16 @@ public class EditProfilController {
         user = this.theModel.getUser();
         this.theView.setNama(user.getNama());
         this.theView.addSaveListener(new SaveListener());
+        this.theView.addBrowseListener(new BrowseListener());
+    }
+    
+    class BrowseListener implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            theView.showChooser();
+        }
+        
     }
     
     class SaveListener implements ActionListener{
@@ -42,6 +50,9 @@ public class EditProfilController {
             try {
                 theModel.setNama(theView.getNama());
                 theModel.saveUser();
+                if (!theView.getPath().equals("")) {
+                    theModel.uploadFoto(theView.getPath());
+                }
                 theView.dispose();
                 ProfilView theView = new ProfilView();
                 ProfilModel theModel = new ProfilModel(user);

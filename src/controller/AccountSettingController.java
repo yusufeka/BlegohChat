@@ -29,5 +29,5 @@ class AccountSettingController {
             theView.setVisible(true);
         }
     }
-    
+   
 }

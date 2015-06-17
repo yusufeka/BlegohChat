@@ -1,6 +1,9 @@
 package view;
 
 import java.awt.event.ActionListener;
+import java.io.File;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -13,6 +16,7 @@ public class EditProfilView extends javax.swing.JFrame {
      */
     public EditProfilView() {
         initComponents();
+        chooser = new JFileChooser();
     }
     
     @SuppressWarnings("unchecked")
@@ -95,4 +99,27 @@ public class EditProfilView extends javax.swing.JFrame {
     private javax.swing.JTextField nama;
     private javax.swing.JButton save;
     // End of variables declaration//GEN-END:variables
+    private JFileChooser chooser;
+    private String path = "";
+    
+    public String getPath(){
+        return path;
+    }
+    
+    public void showChooser() {
+        String s;
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "JPG & GIF Images", "jpg", "gif","png");
+        chooser.setFileFilter(filter);
+        int returnVal = chooser.showOpenDialog(this);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = chooser.getSelectedFile();
+            s = chooser.getSelectedFile().getAbsolutePath();
+            path =s;
+        } else {
+            
+        }
+    }
+    
 }

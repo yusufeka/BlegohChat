@@ -19,8 +19,8 @@ public class Conversation {
         this.friendUser = friendUser;
         kon = new Koneksi();
         kon.from("chat");
-        kon.where("(user_id_sender = "+user.getUserId()+" and user_id_receiver = "+friendUser.getUserId()+") "
-                + "or  (user_id_sender = "+friendUser.getUserId()+" and user_id_receiver = "+user.getUserId()+")");
+        kon.where("(user_id_sender = "+user.getUserId()+" and user_id_receiver = "+friendUser.getUserId()+" and is_sender_delete = 0) "
+                + "or  (user_id_sender = "+friendUser.getUserId()+" and user_id_receiver = "+user.getUserId()+" and is_receiver_delete = 0)");
         kon.executeQuery();
         chat = new ArrayList<>();
         while(kon.getResult().next()){

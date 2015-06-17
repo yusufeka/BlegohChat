@@ -32,15 +32,16 @@ public class AddModel {
         return user;
     }
     
+    public boolean isUserExist(String username) throws SQLException{
+        return user.isUsernameExist(username);
+    }
+    
     public void saveKontak() throws SQLException{
         int userID = this.user.getUserId();
         int kontakID = this.kontak.getUserId();
         String sql = "insert into kontak values("+userID+","+kontakID+")";
         kon.setQuery(sql);
         kon.executeUpdate();
-    }
-    
-    public void close() throws SQLException{
         kon.close();
     }
 

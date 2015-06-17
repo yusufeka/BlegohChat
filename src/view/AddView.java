@@ -7,6 +7,9 @@
 package view;
 
 import java.awt.event.ActionListener;
+import java.io.File;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -90,7 +93,7 @@ public class AddView extends javax.swing.JFrame {
     private javax.swing.JLabel pesan;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
-
+    
     public String getUsername(){
         return txtUsername.getText();
     }

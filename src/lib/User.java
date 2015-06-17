@@ -59,6 +59,7 @@ public class User {
         this.foto = kon.getResult().getString("foto");
         this.status = kon.getResult().getString("status");
         this.isActive = kon.getResult().getInt("is_active");
+        this.password = kon.getResult().getString("password");
         this.code = kon.getResult().getString("confirmation_code");
         kon.close();
     }

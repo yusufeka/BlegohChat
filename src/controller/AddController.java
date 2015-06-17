@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 import lib.User;
 import model.AddModel;
 import model.NewChatModel;
@@ -33,9 +34,14 @@ class AddController {
         @Override
         public void actionPerformed(ActionEvent ae) {
             try {
-                User kontak = new User(theView.getUsername());
-                theModel.setKontak(kontak);
-                theModel.saveKontak();
+                if (theModel.isUserExist(theView.getUsername())) {
+                    User kontak = new User(theView.getUsername());
+                    theModel.setKontak(kontak);
+                    theModel.saveKontak();
+                    JOptionPane.showMessageDialog(theView, "Berhasil ditambahkan");
+                }else{
+                    JOptionPane.showMessageDialog(theView, "User tidak ditemukan");
+                }
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
@@ -49,7 +55,6 @@ class AddController {
         @Override
         public void actionPerformed(ActionEvent ae) {
             try {
-                theModel.close();
                 theView.dispose();
                 NewChatView theView = new NewChatView();
                 NewChatModel theModel;
@@ -57,7 +62,7 @@ class AddController {
                 NewChatController theController = new NewChatController(theModel, theView);
                 theView.setVisible(true);
             } catch (SQLException | IOException ex) {
-               ex.printStackTrace();
+                ex.printStackTrace();
             }
         }
     }

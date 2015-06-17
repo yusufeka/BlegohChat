@@ -1,8 +1,6 @@
 package blegohchat;
 
 import controller.LoginController;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import model.LoginModel;
 import view.LoginView;
 

@@ -7,11 +7,11 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import lib.User;
 import model.*;
 import view.*;
@@ -31,6 +31,14 @@ public class NewChatController {
         new AddContact().start();
         this.theView.addBackListener(new BackListener());
         this.theView.addAddListener(new AddListener());
+        this.theView.addCariListener(new CariListener());
+    }
+    
+    class CariListener extends KeyAdapter{
+        @Override
+        public void keyReleased(KeyEvent e) {
+            theView.cariNama(theView.getCari());
+        }
     }
 
     class AddContact extends Thread {

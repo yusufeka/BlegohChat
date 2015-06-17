@@ -7,8 +7,6 @@ import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import lib.Chat;
 import lib.User;
 import model.ChatModel;
@@ -46,6 +44,7 @@ public class ChatController {
         this.theView.addSendListener(new SendListener());
         this.theView.addFotoListener(new FotoListener());
         this.theView.detailListener(new DetailListener());
+        this.theView.addHapusChatListener(new HapusChatListener());
     }
 
     class Refresher extends Thread {
@@ -141,5 +140,19 @@ public class ChatController {
 
             }
         }
+    }
+    
+    class HapusChatListener implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent ae) {
+            try {
+                theModel.hapusChat();
+                theView.removeConversation();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        
     }
 }
